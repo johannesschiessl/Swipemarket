@@ -36,6 +36,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "df27289a-184c-477d-9be1-6a7ea08bb329"
+      }
+    },
+    "owner": "unique-app"
   }
 }
