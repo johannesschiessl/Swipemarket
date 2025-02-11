@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, ActivityIndicator } from "react-native";
 import { Stack, useRouter } from "expo-router";
 import { supabase } from "@/lib/supabase";
+import { PortalHost } from "@rn-primitives/portal";
 
 export default function AppLayout(): JSX.Element {
   const [loading, setLoading] = useState<boolean>(true);
@@ -37,8 +38,11 @@ export default function AppLayout(): JSX.Element {
   }
 
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="(tabs)" />
-    </Stack>
+    <>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(tabs)" />
+      </Stack>
+      <PortalHost />
+    </>
   );
 }
