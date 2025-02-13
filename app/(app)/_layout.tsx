@@ -43,6 +43,7 @@ export default function AppLayout(): JSX.Element {
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="settings" />
+        <Stack.Screen name="products/[productId]" />
       </Stack>
       <PortalHost />
     </ProfileProvider>

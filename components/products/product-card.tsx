@@ -1,7 +1,7 @@
 import { Product } from "@/types/products";
 import { View, Text, Image, Pressable } from "react-native";
 import { Heart, PlusCircle, X } from "lucide-react-native";
-
+import { useRouter } from "expo-router";
 interface ProductCardProps {
   product: Product;
   onLike: () => void;
@@ -15,8 +15,13 @@ export default function ProductCard({
   onAddToList,
   onNotInterested,
 }: ProductCardProps) {
+  const router = useRouter();
+
   return (
-    <View className="relative w-full aspect-[4/5] rounded-[1rem] overflow-hidden">
+    <Pressable
+      onPress={() => router.push(`/(app)/products/${product.id}` as any)}
+      className="relative w-full aspect-[4/5] rounded-[1rem] overflow-hidden"
+    >
       {/* Background Image */}
       <Image
         source={{ uri: product.images[0] }}
@@ -63,6 +68,6 @@ export default function ProductCard({
         </Text>
         <Text className="text-xs text-white/80">@{product.user_id}</Text>
       </View>
-    </View>
+    </Pressable>
   );
 }
