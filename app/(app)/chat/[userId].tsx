@@ -1,6 +1,5 @@
 import {
   View,
-  Text,
   TextInput,
   FlatList,
   KeyboardAvoidingView,
@@ -15,9 +14,10 @@ import { useChat } from "@/hooks/chat/use-chat";
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/lib/supabase";
 import { Message } from "@/types/chat/message";
+import { Profile } from "@/types/profile";
 import { Plus, ArrowUp, X } from "lucide-react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import HeaderWithClose from "@/components/shared/header-with-close";
+import ChatHeader from "@/components/chat/chat-header";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 import { Buffer } from "buffer";
@@ -30,6 +30,9 @@ export default function ChatPage() {
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [otherUserProfile, setOtherUserProfile] = useState<Profile | null>(
+    null,
+  );
   const flatListRef = useRef<FlatList>(null);
   const inputRef = useRef<TextInput>(null);
 
@@ -40,6 +43,24 @@ export default function ChatPage() {
       }
     });
   }, []);
+
+  useEffect(() => {
+    async function loadProfile() {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("user_id", userId)
+        .single();
+
+      if (!error && data) {
+        setOtherUserProfile(data);
+      } else {
+        console.error("Error loading profile:", error);
+      }
+    }
+
+    loadProfile();
+  }, [userId]);
 
   useEffect(() => {
     if (messages.length > 0) {
@@ -130,17 +151,17 @@ export default function ChatPage() {
     );
   };
 
-  if (loading) {
+  if (loading || !currentUserId || !otherUserProfile) {
     return (
       <View className="flex-1 items-center justify-center">
-        <Text>Loading...</Text>
+        <ActivityIndicator size="large" />
       </View>
     );
   }
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top", "bottom"]}>
-      <HeaderWithClose title="Chat" onClose={() => router.back()} />
+      <ChatHeader profile={otherUserProfile} onClose={() => router.back()} />
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         className="flex-1"
