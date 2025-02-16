@@ -12,6 +12,7 @@ import * as React from "react";
 import { Platform } from "react-native";
 import { NAV_THEME } from "@/constants/nav-theme";
 import { useColorScheme } from "@/lib/use-color-scheme";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
@@ -50,10 +51,12 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-      <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
-      <Stack screenOptions={{ headerShown: false }} />
-    </ThemeProvider>
+    <GestureHandlerRootView>
+      <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
+        <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
+        <Stack screenOptions={{ headerShown: false }} />
+      </ThemeProvider>
+    </GestureHandlerRootView>
   );
 }
 
