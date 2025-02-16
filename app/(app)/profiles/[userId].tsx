@@ -8,6 +8,7 @@ import { type Profile } from "@/types/profile";
 import { type Review } from "@/types/profile/review";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ReviewCard from "@/components/profiles/reviews/review-card";
+import { Button } from "@/components/ui/button";
 
 interface ProfileWithReviews extends Profile {
   reviews: (Review & {
@@ -136,52 +137,66 @@ export default function ProfilePage() {
         onClose={() => router.back()}
       />
 
-      {/* Profile Content */}
-      <View className="flex-1 px-4">
-        {/* Profile Image and Basic Info */}
-        <View className="items-center mt-4 mb-6">
-          {profile.image_url ? (
-            <Image
-              source={{ uri: profile.image_url }}
-              className="w-24 h-24 rounded-full mb-4"
-              resizeMode="cover"
-            />
-          ) : (
-            <View className="w-24 h-24 rounded-full bg-muted mb-4 items-center justify-center">
-              <Text className="text-2xl text-foreground">
-                {profile.name?.charAt(0) || "?"}
+      <ScrollView showsVerticalScrollIndicator={false} className="flex-1">
+        <View className="flex-1 px-4">
+          {/* Profile Image and Basic Info */}
+          <View className="items-center mt-4 mb-6">
+            {profile.image_url ? (
+              <Image
+                source={{ uri: profile.image_url }}
+                className="w-24 h-24 rounded-full mb-4"
+                resizeMode="cover"
+              />
+            ) : (
+              <View className="w-24 h-24 rounded-full bg-muted mb-4 items-center justify-center">
+                <Text className="text-2xl text-foreground">
+                  {profile.name?.charAt(0) || "?"}
+                </Text>
+              </View>
+            )}
+            <Text className="text-xl font-bold text-foreground">
+              {profile.name || "No name set"}
+            </Text>
+            <Text className="text-base text-muted-foreground">
+              @{profile.username || "username"}
+            </Text>
+          </View>
+
+          {/* Bio */}
+          {profile.bio && (
+            <View className="mb-8 px-2">
+              <Text className="text-base text-foreground text-center">
+                {profile.bio}
               </Text>
             </View>
           )}
-          <Text className="text-xl font-bold text-foreground">
-            {profile.name || "No name set"}
-          </Text>
-          <Text className="text-base text-muted-foreground">
-            @{profile.username || "username"}
-          </Text>
-        </View>
 
-        {/* Bio */}
-        {profile.bio && (
-          <View className="mb-8 px-2">
-            <Text className="text-base text-foreground text-center">
-              {profile.bio}
-            </Text>
-          </View>
-        )}
+          {/* Write Review Button */}
+          <Button
+            variant="outline"
+            className="mb-8"
+            onPress={() =>
+              router.push(`/(app)/profiles/review/${userId}` as any)
+            }
+          >
+            <Text className="text-foreground">Write a Review</Text>
+          </Button>
 
-        {/* Tabs Section */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="flex-row w-full">
-            <TabsTrigger value="products" className="flex-1">
-              <Text>Products</Text>
-            </TabsTrigger>
-            <TabsTrigger value="reviews" className="flex-1">
-              <Text>Reviews ({profile.reviews.length})</Text>
-            </TabsTrigger>
-          </TabsList>
+          {/* Tabs Section */}
+          <Tabs
+            value={activeTab}
+            onValueChange={setActiveTab}
+            className="w-full"
+          >
+            <TabsList className="flex-row w-full">
+              <TabsTrigger value="products" className="flex-1">
+                <Text>Products</Text>
+              </TabsTrigger>
+              <TabsTrigger value="reviews" className="flex-1">
+                <Text>Reviews ({profile.reviews.length})</Text>
+              </TabsTrigger>
+            </TabsList>
 
-          <ScrollView showsVerticalScrollIndicator={false}>
             <TabsContent value="products" className="flex-1">
               <View className="flex-1 items-center justify-center p-4">
                 <Text className="text-muted-foreground">
@@ -203,9 +218,9 @@ export default function ProfilePage() {
                 </View>
               )}
             </TabsContent>
-          </ScrollView>
-        </Tabs>
-      </View>
+          </Tabs>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
