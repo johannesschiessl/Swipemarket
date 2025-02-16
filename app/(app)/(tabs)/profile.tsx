@@ -111,52 +111,55 @@ export default function ProfilePage(): JSX.Element {
         </TouchableOpacity>
       </View>
 
-      {/* Profile Content */}
-      <View className="flex-1 px-4">
-        {/* Profile Image and Basic Info */}
-        <View className="items-center mt-4 mb-6">
-          {contextProfile.image_url ? (
-            <Image
-              source={{ uri: contextProfile.image_url }}
-              className="w-24 h-24 rounded-full mb-4"
-              resizeMode="cover"
-            />
-          ) : (
-            <View className="w-24 h-24 rounded-full bg-muted mb-4 items-center justify-center">
-              <Text className="text-2xl text-foreground">
-                {contextProfile.name?.charAt(0) || "?"}
+      <ScrollView showsVerticalScrollIndicator={false} className="flex-1">
+        <View className="flex-1 px-4">
+          {/* Profile Image and Basic Info */}
+          <View className="items-center mt-4 mb-6">
+            {contextProfile.image_url ? (
+              <Image
+                source={{ uri: contextProfile.image_url }}
+                className="w-24 h-24 rounded-full mb-4"
+                resizeMode="cover"
+              />
+            ) : (
+              <View className="w-24 h-24 rounded-full bg-muted mb-4 items-center justify-center">
+                <Text className="text-2xl text-foreground">
+                  {contextProfile.name?.charAt(0) || "?"}
+                </Text>
+              </View>
+            )}
+            <Text className="text-xl font-bold text-foreground">
+              {contextProfile.name || "Set up your profile"}
+            </Text>
+            <Text className="text-base text-muted-foreground">
+              @{contextProfile.username || "username"}
+            </Text>
+          </View>
+
+          {/* Bio */}
+          {contextProfile.bio && (
+            <View className="mb-8 px-2">
+              <Text className="text-base text-foreground text-center">
+                {contextProfile.bio}
               </Text>
             </View>
           )}
-          <Text className="text-xl font-bold text-foreground">
-            {contextProfile.name || "Set up your profile"}
-          </Text>
-          <Text className="text-base text-muted-foreground">
-            @{contextProfile.username || "username"}
-          </Text>
-        </View>
 
-        {/* Bio */}
-        {contextProfile.bio && (
-          <View className="mb-8 px-2">
-            <Text className="text-base text-foreground text-center">
-              {contextProfile.bio}
-            </Text>
-          </View>
-        )}
+          {/* Tabs Section */}
+          <Tabs
+            value={activeTab}
+            onValueChange={setActiveTab}
+            className="w-full"
+          >
+            <TabsList className="flex-row w-full">
+              <TabsTrigger value="products" className="flex-1">
+                <Text>Products</Text>
+              </TabsTrigger>
+              <TabsTrigger value="reviews" className="flex-1">
+                <Text>Reviews ({reviews.length})</Text>
+              </TabsTrigger>
+            </TabsList>
 
-        {/* Tabs Section */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="flex-row w-full">
-            <TabsTrigger value="products" className="flex-1">
-              <Text>Products</Text>
-            </TabsTrigger>
-            <TabsTrigger value="reviews" className="flex-1">
-              <Text>Reviews ({reviews.length})</Text>
-            </TabsTrigger>
-          </TabsList>
-
-          <ScrollView showsVerticalScrollIndicator={false}>
             <TabsContent value="products" className="flex-1">
               <View className="flex-1 items-center justify-center p-4">
                 <Text className="text-muted-foreground">
@@ -184,9 +187,9 @@ export default function ProfilePage(): JSX.Element {
                 </View>
               )}
             </TabsContent>
-          </ScrollView>
-        </Tabs>
-      </View>
+          </Tabs>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
