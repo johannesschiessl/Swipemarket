@@ -66,7 +66,31 @@ export default function ProductCard({
         <Text className="text-sm text-white/90 mb-2" numberOfLines={2}>
           {product.description}
         </Text>
-        <Text className="text-xs text-white/80">@{product.user_id}</Text>
+
+        {/* User Profile Section */}
+        <Pressable
+          onPress={() =>
+            router.push(`/(app)/profiles/${product.user_id}` as any)
+          }
+          className="flex-row items-center mt-1"
+        >
+          {product.profiles.image_url ? (
+            <Image
+              source={{ uri: product.profiles.image_url }}
+              className="w-6 h-6 rounded-full mr-2"
+              resizeMode="cover"
+            />
+          ) : (
+            <View className="w-6 h-6 rounded-full bg-neutral-300 mr-2 items-center justify-center">
+              <Text className="text-xs text-white">
+                {product.profiles.name?.charAt(0) || "?"}
+              </Text>
+            </View>
+          )}
+          <Text className="text-sm text-white">
+            @{product.profiles.username}
+          </Text>
+        </Pressable>
       </View>
     </Pressable>
   );

@@ -19,17 +19,47 @@ export default function HomePage() {
       setLoading(true);
       setError(null);
 
-      const { data, error } = await supabase
+      const { data: productsData, error: productsError } = await supabase
         .from("products")
         .select("*")
         .eq("is_sold", false)
         .order("created_at", { ascending: false });
 
-      if (error) {
-        throw error;
-      }
+      if (productsError) throw productsError;
+      if (!productsData) throw new Error("No products found");
 
-      setProducts(data);
+      const productsWithProfiles = await Promise.all(
+        productsData.map(async (product) => {
+          const { data: profileData, error: profileError } = await supabase
+            .from("profiles")
+            .select("name, username, image_url")
+            .eq("user_id", product.user_id)
+            .single();
+
+          if (profileError) {
+            console.error("Error fetching profile:", profileError);
+            return {
+              ...product,
+              profiles: {
+                name: "",
+                username: "",
+                image_url: null,
+              },
+            };
+          }
+
+          return {
+            ...product,
+            profiles: profileData || {
+              name: "",
+              username: "",
+              image_url: null,
+            },
+          };
+        }),
+      );
+
+      setProducts(productsWithProfiles);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load products");
     } finally {
