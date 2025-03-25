@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "unique-app",
-    "slug": "unique-app",
+    "name": "swipemarket",
+    "slug": "swipemarket",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -45,6 +45,6 @@
         "projectId": "df27289a-184c-477d-9be1-6a7ea08bb329"
       }
     },
-    "owner": "unique-app"
+    "owner": "swipemarket"
   }
 }
